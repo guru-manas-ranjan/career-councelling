@@ -1,6 +1,6 @@
 import { MongoClient,ObjectId } from 'mongodb';
 import jwt from 'jsonwebtoken'
-import { MONGO_URI,DATABASE_NAME } from '../utils/config';
+import { MONGO_URI,DATABASE_NAME } from '../utils/config.js';
 export class MongoDBService {
     constructor() {
         this.client = new MongoClient(MONGO_URI);

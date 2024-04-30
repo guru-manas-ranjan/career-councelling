@@ -13,7 +13,7 @@ const routes=[
 ]
 
 routes.forEach((route)=>{
-    app.use(authRouter)
+    app.use(route)
 })
 
 app.listen(PORT,()=>{
