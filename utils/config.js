@@ -7,5 +7,10 @@ export const MONGO_URI=process.env.MONGO_URI;
 export const DATABASE_NAME='CAREER_GUIDANCE'
 export const JWT_KEY=process.env.JWT_KEY;
 export const TABLE_NAMES={
-    USERS:"USERS"
+    USERS:"USERS",
+    POSTS:"POSTS",
+    LIKES:"LIKES",
+    COMMENT:"COMMENT",
+    BOOKMARK:"BOOKMARK",
+    DOWNVOTE:"DOWNVOTE"
 }
