@@ -10,8 +10,10 @@ export const  createUser = async (req, res) => {
   try {
     const isUserExist = await mongoDBService.findByUniqueValue(
       TABLE_NAMES.USERS,
+      'phoneNumber',
       req.body.phoneNumber
     );
+    console.log(isUserExist);
     if (isUserExist) {
       return res.json({
         statusCode: 404,
