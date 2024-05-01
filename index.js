@@ -16,6 +16,10 @@ routes.forEach((route)=>{
     app.use(route)
 })
 
+app.get("/",(req,res)=>{
+    res.send("Server is Running at Port 5001")
+})
+
 app.listen(PORT,()=>{
     console.log(`Server is running at ${PORT}`)
 })
