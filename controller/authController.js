@@ -1,39 +1,18 @@
 import jwt from "jsonwebtoken";
-import { MongoDBService } from "../service/MongoDBService";
+import { MongoDBService } from "../service/MongoDBService.js";
 import { JWT_KEY, TABLE_NAMES } from "../utils/config.js";
-import { hashPassword } from "../service/BcryptService.js";
+import { comparePassword, hashPassword } from "../service/BcryptService.js";
 import { ObjectId } from "mongodb";
-// {
-//     "name": "John Doe",
-//     "email": "john.doe@example.com",
-//     "password": "hashed_password",
-//     "role": "student",
-//     "interests": ["programming", "engineering"],
-//     "profile": {
-//       "age": 20,
-//       "gender": "male",
-//       "education": "Undergraduate",
-//       "major": "Computer Science",
-//       "skills": ["JavaScript", "Python", "HTML", "CSS"],
-//       "career_goals": "To become a software engineer",
-//       "mentorship_preferences": {
-//         "preferred_industry": "Tech",
-//         "preferred_skills": ["JavaScript", "React"],
-//         "preferred_location": "Remote"
-//       }
-//     },
-//     "created_at": "2024-03-18T12:00:00Z"
-//   }
 
 const mongoDBService = new MongoDBService();
 
-export const createUser = async (req, res) => {
+export const  createUser = async (req, res) => {
   try {
     const isUserExist = await mongoDBService.findByUniqueValue(
       TABLE_NAMES.USERS,
       req.body.phoneNumber
     );
-    if (!isUserExist) {
+    if (isUserExist) {
       return res.json({
         statusCode: 404,
         message: "User Exist Already",
@@ -53,7 +32,7 @@ export const createUser = async (req, res) => {
       email: req.body.email,
       password: hashedPassword,
       role: ["student"],
-      intersts: req.body.intersts,
+      interests: req.body.interests,
       profile: {
         age: req.body.age,
         gender: req.body.gender,
@@ -62,7 +41,7 @@ export const createUser = async (req, res) => {
         skills: req.body.skills,
         careerGoals: req.body.careerGoals,
         mentorshipPreference: {
-          preferredIndustry: req.body.prefferedIndustry,
+          preferredIndustry: req.body.preferredIndustry,
           preferredSkills: req.body.preferredSkills,
           preferredLocation: req.body.preferredLocation,
         },
@@ -97,7 +76,6 @@ export const createUser = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { phoneNumber, password } = req.body;
-
     // Check if the user exists in the database
     const user = await mongoDBService.findByUniqueValue(
       TABLE_NAMES.USERS,
@@ -111,7 +89,7 @@ export const login = async (req, res) => {
     }
 
     // Check if the provided password matches the hashed password stored in the database
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await comparePassword(password, user.password);
 
     if (!passwordMatch) {
       return res
